@@ -48,6 +48,7 @@ class ImageMagick:
                     "multiline": False,
                     "default": ""
                 }),
+                "use_composite": ("BOOLEAN", {"default": False, "label": "Use Composite Mode"}),
             },
             "optional": {
                 "image2": ("IMAGE",),
@@ -110,7 +111,7 @@ class ImageMagick:
 
         return image
 
-    def execute(self, image1, param1, param2, param3, param4, param5, param6, image2 = None, image3 = None):
+    def execute(self, image1, param1, param2, param3, param4, param5, param6, use_composite, image2 = None, image3 = None):
         image1_store_path = self.save_image(image1)
 
         image2_store_path = None
@@ -138,7 +139,11 @@ class ImageMagick:
 
         image_out_path = os.path.normpath(image_out_path)
 
-        params = ['magick', image1_store_path, image2_store_path, image3_store_path, param1, param2, param3, param4, param5, param6, image_out_path]
+
+        if use_composite and image2 is not None:
+            params = ['magick', 'composite', image2_store_path, image1_store_path, param1, param2, param3, param4, param5, param6, image_out_path]
+        else:
+            params = ['magick', image1_store_path, image2_store_path, image3_store_path, param1, param2, param3, param4, param5, param6, image_out_path]
 
         filtered_params = [param for param in params if param not in ['', None]]
 
