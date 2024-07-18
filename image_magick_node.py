@@ -142,9 +142,18 @@ class ImageMagick:
 
         filtered_params = [param for param in params if param not in ['', None]]
 
-        print(filtered_params)
+        command = ' '.join(filtered_params)
 
-        result = subprocess.run(filtered_params)
+        print(command)
+
+        # DANGER: This code is potentially unsafe and should only be used in a private, controlled environment.
+        # Potential security risks include:
+        # - Shell injection vulnerabilities
+        # - Execution of arbitrary commands
+        # - Exposure of sensitive information
+        # DO NOT use this in production or any public-facing systems.
+        # Only for use in isolated, private development environments.
+        result = subprocess.run(command, shell=True)
 
         if result.returncode == 0:
             print("Image processed successfully.")
